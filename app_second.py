@@ -2,12 +2,10 @@ import streamlit as st
 from datetime import datetime, timedelta
 import io
 from fpdf import FPDF
-
 import unicodedata
 
 def clean_text(text):
     return unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode('ascii')
-
 
 # --- Page Title ---
 st.set_page_config(page_title="My Fight Camp Nutrition", layout="centered")
@@ -49,7 +47,6 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-
 
 age = st.sidebar.number_input("Age", min_value=10, max_value=80, value=25)
 sex = st.sidebar.selectbox("Sex", ["Male", "Female", "Dev the Twat"])
@@ -157,56 +154,55 @@ if days_left > 0:
     pdf.add_page()
 
     plan_text = f"""
-    Age: {age}
-    Sex: {sex}
-    Current Weight: {current_weight} kg
-    Target Weight: {target_weight} kg
-    Days Until Fight: {days_left} days
-    Fight Camp Length: {fight_camp_length} weeks
+Age: {age}
+Sex: {sex}
+Current Weight: {current_weight} kg
+Target Weight: {target_weight} kg
+Days Until Fight: {days_left} days
+Fight Camp Length: {fight_camp_length} weeks
 
-    Total Weight to Lose: {weight_to_lose:.1f} kg
-    Fat Loss Goal: {fat_loss_goal:.1f} kg (after {water_cut_kg:.1f} kg water cut)
+Total Weight to Lose: {weight_to_lose:.1f} kg
+Fat Loss Goal: {fat_loss_goal:.1f} kg (after {water_cut_kg:.1f} kg water cut)
 
-    Daily Nutrition Targets:
-    - Calories: ~{2000 - calorie_deficit_per_day:.0f} kcal
-    - Protein: {protein_grams:.0f} g
-    - Fat: {fat_grams:.0f} g
-    - Carbs: {carbs_grams:.0f} g
+Daily Nutrition Targets:
+- Calories: ~{2000 - calorie_deficit_per_day:.0f} kcal
+- Protein: {protein_grams:.0f} g
+- Fat: {fat_grams:.0f} g
+- Carbs: {carbs_grams:.0f} g
 
-    Carbohydrate & Fibre Reduction:
-    - 6–4 days out: reduce carbs by 50%, fibre to 15g/day
-    - 3–1 days out: very low carbs (<50g/day), fibre to 10g/day
+Carbohydrate & Fibre Reduction:
+- 6–4 days out: reduce carbs by 50%, fibre to 15g/day
+- 3–1 days out: very low carbs (<50g/day), fibre to 10g/day
 
-    Water Loading:
-    - 7–5 days out: 6–7L/day
-    - 4–3 days out: 3–4L/day
-    - 2 days out: 1–1.5L
-    - 1 day out: minimal sips only
+Water Loading:
+- 7–5 days out: 6–7L/day
+- 4–3 days out: 3–4L/day
+- 2 days out: 1–1.5L
+- 1 day out: minimal sips only
 
-    Supplement Plan:
-    - Multivitamins, electrolytes, protein supplements as needed.
+Supplement Plan:
+- Multivitamins, electrolytes, protein supplements as needed.
 
-    Post Weigh-In Rehydration:
-    - 1L electrolyte immediately
-    - Carbohydrate meals every 1–2 hours.
+Post Weigh-In Rehydration:
+- 1L electrolyte immediately
+- Carbohydrate meals every 1–2 hours.
 
-    Subscription Plan:
-    - Total Price: £{subscription_price}
-       """
-    
+Subscription Plan:
+- Total Price: £{subscription_price}
+"""
 
-# Before adding to PDF
-plan_text = clean_text(plan_text)
+    # Clean plan text
+    plan_text = clean_text(plan_text)
 
-pdf.chapter_body(plan_text)
-pdf_output = pdf.output(dest='S').encode('latin1')
+    pdf.chapter_body(plan_text)
+    pdf_output = pdf.output(dest='S').encode('latin1')
 
-st.download_button(
-    label="Download Your Fight Camp Plan as PDF",
-    data=pdf_output,
-    file_name="fight_camp_plan.pdf",
-    mime="application/pdf"
-)
+    st.download_button(
+        label="Download Your Fight Camp Plan as PDF",
+        data=pdf_output,
+        file_name="fight_camp_plan.pdf",
+        mime="application/pdf"
+    )
 
 else:
     st.error("Please select a valid future fight date.")
