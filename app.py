@@ -86,57 +86,59 @@ if days_left > 0:
     st.write("- 2 days out: 1–1.5L.")
     st.write("- 1 day out: Minimal sips only.")
 
+    import io
+
+# --- Create Plan Text ---
+    plan_text = f"""
+    Fight Camp Nutrition Plan
+
+    Age: {age}
+    Sex: {sex}
+    Current Weight: {current_weight} kg
+    Target Weight: {target_weight} kg
+    Days Until Fight: {days_left} days
+    Fight Camp Length: {fight_camp_length} weeks
+
+    Total Weight to Lose: {weight_to_lose:.1f} kg
+    Fat Loss Goal: {fat_loss_goal:.1f} kg (after {water_cut_kg:.1f} kg water cut)
+
+    Daily Nutrition Targets:
+    - Calories: ~{2000 - calorie_deficit_per_day:.0f} kcal
+    - Protein: {protein_grams:.0f} g
+    - Fat: {fat_grams:.0f} g
+    - Carbs: {carbs_grams:.0f} g
+
+    Carbohydrate & Fibre Reduction:
+    - 6–4 days out: reduce carbs by 50%, fibre to 15g/day
+    - 3–1 days out: very low carbs (<50g/day), fibre to 10g/day
+
+    Water Loading:
+    - 7–5 days out: 6–7L/day
+    - 4–3 days out: 3–4L/day
+    - 2 days out: 1–1.5L
+    - 1 day out: minimal sips only
+
+    Subscription Plan:
+    - Total Price: £{total_price}
+    """
+
+    # --- Create Downloadable File ---
+    plan_bytes = io.BytesIO()
+    plan_bytes.write(plan_text.encode('utf-8'))
+    plan_bytes.seek(0)
+
+    # --- Download Button ---
+    st.download_button(
+        label="Download Your Fight Camp Plan",
+        data=plan_bytes,
+        file_name="fight_camp_plan.txt",
+        mime="text/plain"
+    )
+
+
 else:
     st.error("Please select a valid future fight date.")
 
 # --- Footer ---
 st.caption("Built for serious fighters preparing for peak performance.")
 
-import io
-
-# --- Create Plan Text ---
-plan_text = f"""
-Fight Camp Nutrition Plan
-
-Age: {age}
-Sex: {sex}
-Current Weight: {current_weight} kg
-Target Weight: {target_weight} kg
-Days Until Fight: {days_left} days
-Fight Camp Length: {fight_camp_length} weeks
-
-Total Weight to Lose: {weight_to_lose:.1f} kg
-Fat Loss Goal: {fat_loss_goal:.1f} kg (after {water_cut_kg:.1f} kg water cut)
-
-Daily Nutrition Targets:
-- Calories: ~{2000 - calorie_deficit_per_day:.0f} kcal
-- Protein: {protein_grams:.0f} g
-- Fat: {fat_grams:.0f} g
-- Carbs: {carbs_grams:.0f} g
-
-Carbohydrate & Fibre Reduction:
-- 6–4 days out: reduce carbs by 50%, fibre to 15g/day
-- 3–1 days out: very low carbs (<50g/day), fibre to 10g/day
-
-Water Loading:
-- 7–5 days out: 6–7L/day
-- 4–3 days out: 3–4L/day
-- 2 days out: 1–1.5L
-- 1 day out: minimal sips only
-
-Subscription Plan:
-- Total Price: £{total_price}
-"""
-
-# --- Create Downloadable File ---
-plan_bytes = io.BytesIO()
-plan_bytes.write(plan_text.encode('utf-8'))
-plan_bytes.seek(0)
-
-# --- Download Button ---
-st.download_button(
-    label="Download Your Fight Camp Plan",
-    data=plan_bytes,
-    file_name="fight_camp_plan.txt",
-    mime="text/plain"
-)
