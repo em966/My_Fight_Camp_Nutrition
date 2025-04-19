@@ -187,16 +187,24 @@ if days_left > 0:
     Subscription Plan:
     - Total Price: £{subscription_price}
        """
+    
+import unicodedata
 
-    pdf.chapter_body(plan_text)
-    pdf_output = pdf.output(dest='S').encode('latin-1', 'replace')
+def clean_text(text):
+    return unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode('ascii')
 
-    st.download_button(
-        label="Download Your Fight Camp Plan as PDF",
-        data=pdf_output,
-        file_name="fight_camp_plan.pdf",
-        mime="application/pdf"
-    )
+# Before adding to PDF
+plan_text = clean_text(plan_text)
+
+pdf.chapter_body(plan_text)
+pdf_output = pdf.output(dest='S').encode('latin1')
+
+st.download_button(
+    label="Download Your Fight Camp Plan as PDF",
+    data=pdf_output,
+    file_name="fight_camp_plan.pdf",
+    mime="application/pdf"
+)
 
 else:
     st.error("Please select a valid future fight date.")
