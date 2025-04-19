@@ -3,6 +3,12 @@ from datetime import datetime, timedelta
 import io
 from fpdf import FPDF
 
+import unicodedata
+
+def clean_text(text):
+    return unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode('ascii')
+
+
 # --- Page Title ---
 st.set_page_config(page_title="My Fight Camp Nutrition", layout="centered")
 st.title("My Fight Camp Nutrition")
@@ -188,10 +194,6 @@ if days_left > 0:
     - Total Price: £{subscription_price}
        """
     
-import unicodedata
-
-def clean_text(text):
-    return unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode('ascii')
 
 # Before adding to PDF
 plan_text = clean_text(plan_text)
