@@ -21,6 +21,30 @@ st.markdown(
 # --- Sidebar Inputs ---
 st.sidebar.header("Your Fight Details")
 
+# --- Theme Selector ---
+theme = st.sidebar.radio("Choose Theme:", ("Light Mode", "Dark Mode"))
+
+if theme == "Light Mode":
+    page_bg_color = "#ffffff"
+    text_color = "#000000"
+else:
+    page_bg_color = "#0e1117"
+    text_color = "#fafafa"
+
+# Apply custom style
+st.markdown(
+    f"""
+    <style>
+    .stApp {{
+        background-color: {page_bg_color};
+        color: {text_color};
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+
 age = st.sidebar.number_input("Age", min_value=10, max_value=80, value=25)
 sex = st.sidebar.selectbox("Sex", ["Male", "Female", "Dev the Twat"])
 current_weight = st.sidebar.number_input("Current Weight (kg)", min_value=30.0, max_value=150.0, value=70.0, step=0.1)
@@ -165,7 +189,7 @@ if days_left > 0:
        """
 
     pdf.chapter_body(plan_text)
-    pdf_output = pdf.output(dest='S').encode('latin1')
+    pdf_output = pdf.output(dest='S').encode('latin-1', 'replace')
 
     st.download_button(
         label="Download Your Fight Camp Plan as PDF",
