@@ -2,16 +2,19 @@ import streamlit as st
 from datetime import datetime, timedelta
 
 # Title
-st.title("🏋️ Muay Thai Fight Camp Nutrition Planner")
+st.title("My Fight Camp Nutrition")
 
 # Sidebar Inputs
 st.sidebar.header("Enter your Fight Camp Details:")
-age = st.sidebar.number_input("Age", min_value=10, max_value=80, value=25)
-sex = st.sidebar.selectbox("Sex", ["Male", "Female"])
-current_weight = st.sidebar.number_input("Current Weight (kg)", min_value=30.0, max_value=150.0, value=70.0)
-target_weight = st.sidebar.number_input("Target Fight Weight (kg)", min_value=30.0, max_value=150.0, value=65.0)
-fight_camp_length = st.sidebar.selectbox("Fight Camp Length (weeks)", [6, 8, 10, 12])
-water_cut_percentage = st.sidebar.slider("Water Cut Percentage (Max 5%)", min_value=0.0, max_value=5.0, value=3.0)
+age = st.sidebar.number_input("Age", min_value=16, max_value=80, value=25)
+sex = st.sidebar.selectbox("Sex", ["Male", "Female", "Alien"])
+current_weight = st.sidebar.number_input("Current Weight (kg)", min_value=30.0, max_value=150.0, value=70.0, step = 0.05)
+target_weight = st.sidebar.number_input("Target Fight Weight (kg)", min_value=30.0, max_value=150.0, value=65.0, step = 0.05)
+# Calculate days and weeks to fight
+days_left = (fight_date - datetime.today().date()).days
+weeks_left = days_left / 7
+fight_camp_length = int(weeks_left) if weeks_left == int(weeks_left) else int(weeks_left) + 1
+water_cut_percentage = st.sidebar.slider("Water Cut Percentage (Max 5%)", min_value=0.0, max_value=5.0, value=3.0, step=0.1)
 fight_date = st.sidebar.date_input("Fight Date", min_value=datetime.today())
 
 # Calculations
