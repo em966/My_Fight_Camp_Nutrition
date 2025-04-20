@@ -21,7 +21,7 @@ st.markdown("""
         background-color: #ffffff;
         color: #000000;
     }
-    h1, h2, h3, h4, h5, h6, p, label, div {
+    h1, h2, h3, h4, h5, h6, p, label, div, .css-1v0mbdj, .css-1lcbmhc, .css-1p05c9x, .css-1y4p8pa, .css-q8sbsg {
         color: #000000;
     }
     .stButton>button {
@@ -51,6 +51,10 @@ st.markdown("""
     }
     .stProgress > div > div > div > div {
         background-color: #ff4b4b;
+    }
+    section[data-testid="stSidebar"] {
+        background-color: #1e1e1e;
+        color: #ffffff;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -136,8 +140,7 @@ if days_left > 0:
         calories = (protein * 4) + (fat * 9) + (carbs * 4)
 
         weekly_data.append({
-            "Week": week,
-            "Target Weight (kg)": round(projected_weight, 1),
+            "Target Weight (kg)": f"{projected_weight:.2f}",
             "Calories (kcal)": round(calories),
             "Protein (g)": round(protein),
             "Fat (g)": round(fat),
