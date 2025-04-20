@@ -4,21 +4,7 @@ import io
 from fpdf import FPDF
 import unicodedata
 import base64
-
-# Open the logo file
-with open("/mnt/data/1e7f2ed8-4c87-49e7-8a02-b5d08a74b6f9.png", "rb") as f:
-    logo_base64 = base64.b64encode(f.read()).decode()
-
-# Embed logo
-st.markdown(
-    f"""
-    <div style="text-align: center;">
-        <img src="data:image/png;base64,{logo_base64}" style="width:250px;"/>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
+from PIL import Image
 
 # --- Utility Functions ---
 def clean_text(text):
@@ -51,26 +37,37 @@ st.markdown("""
         border-radius: 10px;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
-    h1, h2, h3 {
+    .header-bar {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .header-bar h1 {
         color: #ff4b4b;
+        margin: 10px 0 0 0;
+        font-size: 2em;
     }
 </style>
 """, unsafe_allow_html=True)
 
-# --- Logo ---
-from PIL import Image
+# --- Logo and Title ---
+with open("/mnt/data/1e7f2ed8-4c87-49e7-8a02-b5d08a74b6f9.png", "rb") as f:
+    logo_base64 = base64.b64encode(f.read()).decode()
 
-# --- Logo ---
-logo = Image.open("/mnt/data/c895a14d-28d6-4701-a539-9c9100d13347.png")
-st.image("/mnt/data/6c0d37cf-eab0-4c49-8cc3-0328816f87ac.png", use_column_width=True)
+st.markdown(
+    f"""
+    <div class="header-bar">
+        <img src="data:image/png;base64,{logo_base64}" style="width:200px; margin-bottom:10px;"/>
+        <h1>My Fight Camp Nutrition</h1>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
-st.title("My Fight Camp Nutrition")
 
-st.markdown("""
-<div style='text-align: center; margin-top: -20px;'>
-    <p>Personalised nutrition, weight cut, and water loading strategy to make weight with ease.</p>
-</div>
-""", unsafe_allow_html=True)
 
 # --- Sidebar Inputs ---
 st.sidebar.header("Your Fight Details")
