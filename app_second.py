@@ -41,12 +41,11 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.title("\U0001F94A My Fight Camp Nutrition \U0001F94A")
+st.title("My Fight Camp Nutrition")
 
 st.markdown("""
 <div style='text-align: center; margin-top: -20px;'>
-    <h3>Welcome to your Fight Camp Planner</h3>
-    <p>Personalized nutrition, weight cut, and water loading strategy to peak on fight day.</p>
+    <p>Personalised nutrition, weight cut, and water loading strategy to make weight with ease.</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -54,7 +53,7 @@ st.markdown("""
 st.sidebar.header("Your Fight Details")
 
 age = st.sidebar.number_input("Age", min_value=10, max_value=80, value=25)
-sex = st.sidebar.selectbox("Sex", ["Male", "Female", "Other"])
+sex = st.sidebar.selectbox("Sex", ["Male", "Female"])
 current_weight = st.sidebar.number_input("Current Weight (kg)", min_value=30.0, max_value=150.0, value=70.0, step=0.1)
 target_weight = st.sidebar.number_input("Target Fight Weight (kg)", min_value=30.0, max_value=150.0, value=65.0, step=0.1)
 fight_date = st.sidebar.date_input("Fight Date", min_value=datetime.today())
@@ -63,7 +62,7 @@ water_cut_percentage = st.sidebar.slider("Water Cut Percentage (Max 5%)", min_va
 st.sidebar.header("Weekly Training Hours")
 high_intensity = st.sidebar.number_input("High Intensity (hrs)", min_value=0.0, max_value=20.0, value=5.0, step=0.5)
 medium_intensity = st.sidebar.number_input("Medium Intensity (hrs)", min_value=0.0, max_value=20.0, value=5.0, step=0.5)
-low_intensity = st.sidebar.number_input("Low Intensity (hrs)", min_value=0.0, max_value=20.0, value=3.0, step=0.5)
+low_intensity = st.sidebar.number_input("Low Intensity (hrs)", min_value=0.0, max_value=20.0, value=5.0, step=0.5)
 
 fight_week_mode = st.sidebar.checkbox("Activate Fight Week Mode")
 
@@ -81,7 +80,7 @@ st.sidebar.write(f"Total Subscription Cost: **\u00a3{subscription_price}**")
 
 if days_left > 0:
     if current_weight <= target_weight:
-        st.error("Current weight must be higher than target fight weight!")
+        st.error("Current weight must be higher than target fight weight.")
     else:
         weight_to_lose = current_weight - target_weight
         water_cut_kg = (water_cut_percentage / 100) * target_weight
@@ -101,7 +100,7 @@ if days_left > 0:
         carbs_grams = remaining_calories / 4
 
         if fight_week_mode:
-            st.header("\U0001F3C6 Fight Week Nutrition Plan \U0001F3C6")
+            st.header("Fight Week Plan")
             st.markdown("---")
             st.subheader("Carbohydrate Management")
             st.write("- 5-7 days out: Reduce carbs by 50-80g/day.")
@@ -110,9 +109,9 @@ if days_left > 0:
             st.subheader("Salt Management")
             st.write("- 3 days before weigh-in: Salt 0.5-1g/day.")
             st.subheader("Water Loading Strategy")
-            st.write("- 4, 3, 2 days out: 100ml/kg body weight.")
-            st.write("- 1 day before weigh-in: 15ml/kg body weight.")
-            st.write("- Weigh-in day: minimal sips only.")
+            st.write("- 4/3/2 days out: 100ml/kg body weight.")
+            st.write("- 1 day out: 15ml/kg body weight.")
+            st.write("- 0 days out: minimal sips only.")
             st.subheader("Post Weigh-In Rehydration")
             st.write("- 1L electrolyte solution immediately after weigh-in.")
             st.write("- Small carb-rich meals every 1-2 hours.")
