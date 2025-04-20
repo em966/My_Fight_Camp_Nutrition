@@ -7,32 +7,6 @@ import unicodedata
 # --- Streamlit Page Config ---
 st.set_page_config(page_title="My Fight Camp Nutrition", layout="centered")
 
-# --- Sidebar Upload Logo ---
-uploaded_logo = st.file_uploader("Upload your logo", type=["png", "jpg", "jpeg"])
-
-if uploaded_logo:
-    st.image(uploaded_logo, width=200)
-
-# --- Title
-st.title("My Fight Camp Nutrition")
-st.caption("Personalised nutrition and weight cut strategy.")
-
-# --- Utility Functions ---
-def clean_text(text):
-    return unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode('ascii')
-
-def estimate_bmr(weight, age, sex):
-    if sex == "Male":
-        return 10 * weight + 6.25 * 170 - 5 * age + 5
-    else:
-        return 10 * weight + 6.25 * 160 - 5 * age - 161
-
-def calculate_training_calories(high, medium, low):
-    return (high * 60 * 11) + (medium * 60 * 7.5) + (low * 60 * 4.5)
-
-# --- Streamlit Page Config ---
-st.set_page_config(page_title="My Fight Camp Nutrition", layout="centered")
-
 # --- Custom Styles ---
 st.markdown("""
 <style>
@@ -63,6 +37,33 @@ st.markdown("""
     }
 </style>
 """, unsafe_allow_html=True)
+
+# --- Sidebar Upload Logo ---
+uploaded_logo = st.sidebar.file_uploader("Upload your logo", type=["png", "jpg", "jpeg"])
+
+# --- Header Section ---
+st.markdown("<div class='header-bar'>", unsafe_allow_html=True)
+
+if uploaded_logo:
+    st.image(uploaded_logo, width=200)
+
+st.title("My Fight Camp Nutrition")
+st.caption("Personalised nutrition and weight cut strategy.")
+st.markdown("</div>", unsafe_allow_html=True)
+
+# --- Utility Functions ---
+def clean_text(text):
+    return unicodedata.normalize('NFKD', text).encode('ascii', 'ignore').decode('ascii')
+
+def estimate_bmr(weight, age, sex):
+    if sex == "Male":
+        return 10 * weight + 6.25 * 170 - 5 * age + 5
+    else:
+        return 10 * weight + 6.25 * 160 - 5 * age - 161
+
+def calculate_training_calories(high, medium, low):
+    return (high * 60 * 11) + (medium * 60 * 7.5) + (low * 60 * 4.5)
+
 
 
 # --- Sidebar Inputs ---
