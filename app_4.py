@@ -34,11 +34,20 @@ st.markdown("""
         margin-top: 10px;
     }
     .section {
-        background-color: #f2f2f2;
+        background-color: #f9f9f9;
         padding: 25px;
         margin-bottom: 20px;
         border-radius: 10px;
         box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+    .stDataFrame thead tr th {
+        background-color: #f2f2f2;
+        color: #000000;
+        font-weight: bold;
+    }
+    .stDataFrame tbody tr td {
+        background-color: #ffffff;
+        color: #000000;
     }
     .stProgress > div > div > div > div {
         background-color: #ff4b4b;
@@ -136,12 +145,14 @@ if days_left > 0:
         })
 
     df = pd.DataFrame(weekly_data)
-    st.dataframe(df, use_container_width=True)
+    st.dataframe(df.style.set_table_styles([
+        {"selector": "thead", "props": [("background-color", "#f2f2f2"), ("color", "#000000"), ("font-weight", "bold")]},
+        {"selector": "tbody", "props": [("background-color", "#ffffff"), ("color", "#000000")]}
+    ]), use_container_width=True)
 
     st.markdown("## Overall Progress")
     st.progress(1 - days_left / (fight_camp_length * 7))
 
-    # --- Download Plan Button ---
     st.button("Download Your Fight Camp Plan")
 else:
     st.error("Please select a valid future fight date.")
