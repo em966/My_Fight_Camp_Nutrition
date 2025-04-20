@@ -54,7 +54,7 @@ st.markdown(
 )
 
 st.title("My Fight Camp Nutrition")
-st.caption("Personalised nutrition and weight cut strategy.")
+st.caption("Welcome to a protoype of our app. It has been designed exclusively by fighters, for fighters! MY Fight Camp Nutrition is here to guide you through your weight cut by incorporating tried-and-tested weight loss principles to ensure you are in prime condition for competition!")
 st.markdown("</div>", unsafe_allow_html=True)
 
 
