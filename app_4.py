@@ -21,9 +21,11 @@ st.markdown("""
         background-color: #ffffff;
         color: #000000;
     }
-    .stSidebar, .css-1d391kg { 
-        background-color: #262730; 
-        color: #ffffff; 
+    .stSidebar, .css-1d391kg, .stSidebar label, .stSidebar p, .stSidebar div {
+    background-color: #262730;
+    color: #ffffff;
+}
+
     }
     .css-q8sbsg, .css-1v3fvcr, .css-1lcbmhc { 
         color: #ffffff; 
