@@ -26,11 +26,16 @@ st.markdown("""
     .stApp {
         background-color: #f0f2f6;
         color: #000000;
-        border: 5px solid #ff4b4b;
-        border-radius: 10px;
         padding: 20px;
     }
-    h1, h2, h3, h4 {
+    .section {
+        background-color: #ffffff;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    h1, h2, h3 {
         color: #ff4b4b;
     }
 </style>
@@ -40,17 +45,16 @@ st.title("\U0001F94A My Fight Camp Nutrition \U0001F94A")
 
 st.markdown("""
 <div style='text-align: center; margin-top: -20px;'>
-    <p>Personalised nutrition, weight cut, and water loading strategy to make cutting weight simple.</p>
+    <h3>Welcome to your Fight Camp Planner</h3>
+    <p>Personalized nutrition, weight cut, and water loading strategy to peak on fight day.</p>
 </div>
 """, unsafe_allow_html=True)
 
 # --- Sidebar Inputs ---
 st.sidebar.header("Your Fight Details")
 
-theme = st.sidebar.radio("Choose Theme:", ("Light Mode", "Dark Mode"))
-
-age = st.sidebar.number_input("Age", min_value=16, max_value=80, value=25)
-sex = st.sidebar.selectbox("Sex", ["Male", "Female"])
+age = st.sidebar.number_input("Age", min_value=10, max_value=80, value=25)
+sex = st.sidebar.selectbox("Sex", ["Male", "Female", "Other"])
 current_weight = st.sidebar.number_input("Current Weight (kg)", min_value=30.0, max_value=150.0, value=70.0, step=0.1)
 target_weight = st.sidebar.number_input("Target Fight Weight (kg)", min_value=30.0, max_value=150.0, value=65.0, step=0.1)
 fight_date = st.sidebar.date_input("Fight Date", min_value=datetime.today())
@@ -59,7 +63,7 @@ water_cut_percentage = st.sidebar.slider("Water Cut Percentage (Max 5%)", min_va
 st.sidebar.header("Weekly Training Hours")
 high_intensity = st.sidebar.number_input("High Intensity (hrs)", min_value=0.0, max_value=20.0, value=5.0, step=0.5)
 medium_intensity = st.sidebar.number_input("Medium Intensity (hrs)", min_value=0.0, max_value=20.0, value=5.0, step=0.5)
-low_intensity = st.sidebar.number_input("Low Intensity (hrs)", min_value=0.0, max_value=20.0, value=5.0, step=0.5)
+low_intensity = st.sidebar.number_input("Low Intensity (hrs)", min_value=0.0, max_value=20.0, value=3.0, step=0.5)
 
 fight_week_mode = st.sidebar.checkbox("Activate Fight Week Mode")
 
@@ -77,7 +81,7 @@ st.sidebar.write(f"Total Subscription Cost: **\u00a3{subscription_price}**")
 
 if days_left > 0:
     if current_weight <= target_weight:
-        st.error("Current weight must be higher than target fight weight.")
+        st.error("Current weight must be higher than target fight weight!")
     else:
         weight_to_lose = current_weight - target_weight
         water_cut_kg = (water_cut_percentage / 100) * target_weight
@@ -97,115 +101,55 @@ if days_left > 0:
         carbs_grams = remaining_calories / 4
 
         if fight_week_mode:
-            carbs_grams -= 60
-            fibre_grams = 10
-            salt_grams = 1
+            st.header("\U0001F3C6 Fight Week Nutrition Plan \U0001F3C6")
+            st.markdown("---")
+            st.subheader("Carbohydrate Management")
+            st.write("- 5-7 days out: Reduce carbs by 50-80g/day.")
+            st.subheader("Fibre Management")
+            st.write("- 3 days before weigh-in: Fibre <10g/day.")
+            st.subheader("Salt Management")
+            st.write("- 3 days before weigh-in: Salt 0.5-1g/day.")
+            st.subheader("Water Loading Strategy")
+            st.write("- 4, 3, 2 days out: 100ml/kg body weight.")
+            st.write("- 1 day before weigh-in: 15ml/kg body weight.")
+            st.write("- Weigh-in day: minimal sips only.")
+            st.subheader("Post Weigh-In Rehydration")
+            st.write("- 1L electrolyte solution immediately after weigh-in.")
+            st.write("- Small carb-rich meals every 1-2 hours.")
+            st.write("- Avoid high-fat and high-fibre foods initially.")
         else:
-            fibre_grams = 30
-            salt_grams = 4
+            with st.container():
+                st.header("Weight Cut Overview")
+                st.write(f"**Days Until Fight:** {days_left} days")
+                total_camp_days = fight_camp_length * 7
+                days_completed = total_camp_days - days_left
+                progress = max(0, min(1, days_completed / total_camp_days))
+                st.progress(progress)
+                st.write(f"**Current Weight:** {current_weight:.1f} kg")
+                st.write(f"**Fight Week Start Target:** {fight_week_start_weight:.1f} kg")
+                st.write(f"**Fight Weight Target:** {target_weight:.1f} kg")
 
-        st.markdown("---")
-        st.header("Weight Cut Overview")
-        st.write(f"**Days Until Fight:** {days_left} days")
+            with st.container():
+                st.header("Daily Nutrition Targets")
+                st.write(f"**Calories per Day:** ~{target_calories:.0f} kcal")
+                st.write(f"**Protein:** {protein_grams:.0f} g/day")
+                st.write(f"**Fat:** {fat_grams:.0f} g/day")
+                st.write(f"**Carbs:** {carbs_grams:.0f} g/day")
+                st.write("**Fibre:** 30g/day")
+                st.write("**Salt:** 3-5g/day")
 
-        total_camp_days = fight_camp_length * 7
-        days_completed = total_camp_days - days_left
-        progress = max(0, min(1, days_completed / total_camp_days))
-        st.progress(progress)
+            with st.container():
+                st.header("Weekly Weight Goals")
+                for week in range(1, fight_camp_length):
+                    target_weight_week = current_weight - (fat_loss_per_week * week)
+                    st.write(f"Week {week}: Target Weight ~ {target_weight_week:.1f} kg")
+                st.write(f"Fight Week Start: ~{fight_week_start_weight:.1f} kg")
 
-        st.write(f"**Current Weight:** {current_weight:.1f} kg")
-        st.write(f"**Fight Week Start Target:** {fight_week_start_weight:.1f} kg")
-        st.write(f"**Fight Weight Target:** {target_weight:.1f} kg")
-
-        st.markdown("---")
-        st.header("Daily Nutrition Targets")
-        st.write(f"**Calories per Day:** ~{target_calories:.0f} kcal")
-        st.write(f"**Protein:** {protein_grams:.0f} g/day")
-        st.write(f"**Fat:** {fat_grams:.0f} g/day")
-        st.write(f"**Carbs:** {carbs_grams:.0f} g/day")
-        st.write(f"**Fibre:** {fibre_grams} g/day")
-        st.write(f"**Salt:** {salt_grams} g/day")
-
-        st.markdown("---")
-        st.header("Weekly Weight Goals")
-        for week in range(1, fight_camp_length):
-            target_weight_week = current_weight - (fat_loss_per_week * week)
-            st.write(f"Week {week}: Target Weight ~ {target_weight_week:.1f} kg")
-        st.write(f"Fight Week Start: ~{fight_week_start_weight:.1f} kg")
-
-        st.markdown("---")
-        st.header("Fight Week Adjustments")
-        st.write("- 5-7 days out: Reduce carbs by 50-80g/day.")
-        st.write("- 3 days before weigh-in: Fibre <10g/day.")
-        st.write("- 3 days before weigh-in: Salt 0.5-1g/day.")
-
-        st.markdown("---")
-        st.header("Water Loading Strategy")
-        st.write("- 4, 3, 2 days out: 100ml/kg body weight.")
-        st.write("- 1 day before weigh-in: 15ml/kg body weight.")
-        st.write("- Weigh-in day: minimal sips only.")
-
-        st.markdown("---")
-        st.header("Supplement Guidance")
-        st.write("- Daily multivitamin and mineral support.")
-        st.write("- Electrolyte support during water loading.")
-        st.write("- Protein supplements as needed.")
-
-        st.markdown("---")
-        st.header("Post Weigh-In Rehydration Plan")
-        st.write("- 1L electrolyte solution immediately after weigh-in.")
-        st.write("- Small carb-rich meals every 1-2 hours.")
-        st.write("- Avoid high-fat and high-fibre foods initially.")
-
-        class PDF(FPDF):
-            def header(self):
-                self.set_font('Arial', 'B', 16)
-                self.cell(0, 10, 'Fight Camp Nutrition Plan', 0, 1, 'C')
-                self.ln(10)
-            def chapter_body(self, text):
-                self.set_font('Arial', '', 12)
-                self.multi_cell(0, 10, text)
-                self.ln()
-
-        pdf = PDF()
-        pdf.add_page()
-
-        plan_text = f"""
-Age: {age}
-Sex: {sex}
-Current Weight: {current_weight} kg
-Target Fight Weight: {target_weight} kg
-Fight Week Start Weight: {fight_week_start_weight:.1f} kg
-
-Calories: ~{target_calories:.0f} kcal
-Protein: {protein_grams:.0f} g
-Fat: {fat_grams:.0f} g
-Carbs: {carbs_grams:.0f} g
-Fibre: {fibre_grams} g/day
-Salt: {salt_grams} g/day
-
-Fight Week Adjustments:
-- Carbs -50 to -80g/day
-- Fibre <10g/day
-- Salt 0.5-1g/day
-
-Water Loading:
-- 4-2 days out: 100ml/kg
-- 1 day out: 15ml/kg
-- Weigh-in day: minimal
-
-Subscription Cost: £{subscription_price}
-"""
-        plan_text = clean_text(plan_text)
-        pdf.chapter_body(plan_text)
-        pdf_output = pdf.output(dest='S').encode('latin1')
-
-        st.download_button(
-            label="Download Your Fight Camp Plan as PDF",
-            data=pdf_output,
-            file_name="fight_camp_plan.pdf",
-            mime="application/pdf"
-        )
+            with st.container():
+                st.header("Supplement Guidance")
+                st.write("- Daily multivitamin and mineral support.")
+                st.write("- Electrolyte support during water loading.")
+                st.write("- Protein supplements as needed.")
 else:
     st.error("Please select a valid future fight date.")
 
