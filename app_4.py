@@ -1,9 +1,8 @@
 import streamlit as st
 from datetime import datetime, timedelta
-import io
-from fpdf import FPDF
-import unicodedata
+import pandas as pd
 import base64
+import unicodedata
 
 # --- Streamlit Page Config ---
 st.set_page_config(page_title="My Fight Camp Nutrition", layout="centered")
@@ -22,8 +21,8 @@ st.markdown("""
         background-color: #ffffff;
         color: #000000;
     }
-    h1, h2, h3, h4, h5, h6 {
-        color: #ff4b4b;
+    h1, h2, h3, h4, h5, h6, p, label, div {
+        color: #000000;
     }
     .stButton>button {
         background-color: #ff4b4b;
@@ -60,7 +59,7 @@ if logo_base64.strip():
     )
 
 st.title("My Fight Camp Nutrition")
-st.caption("Welcome to a prototype of our app, designed exclusively by fighters, for fighters!")
+st.caption("Welcome to a prototype of our app. It has been designed exclusively by fighters, for fighters! MY Fight Camp Nutrition is here to guide you through your weight cut by incorporating tried-and-tested weight loss principles to ensure you are in prime condition for competition!")
 st.markdown("</div>", unsafe_allow_html=True)
 
 # --- Utility Functions ---
@@ -87,8 +86,6 @@ training_load = st.sidebar.selectbox(
     ("High (10+ hrs)", "Medium (5-10 hrs)", "Low (<5 hrs)")
 )
 
-fight_week_mode = st.sidebar.checkbox("Activate Fight Week Mode")
-
 # --- Determine Carb Multiplier ---
 if training_load == "High (10+ hrs)":
     carbs_multiplier = 3.0
@@ -111,84 +108,40 @@ st.sidebar.write(f"Total Subscription Cost: **£{subscription_price}**")
 
 # --- Main App Content ---
 if days_left > 0:
-    bmr = estimate_bmr(current_weight, age, sex)
-    total_daily_energy = bmr * 1.3
+    st.markdown("## Weekly Nutrition & Weight Targets")
 
-    protein_grams = 2.0 * current_weight
-    fat_grams = 1.0 * current_weight
-    carbs_grams = carbs_multiplier * current_weight
+    weekly_data = []
 
-    calories_from_protein = protein_grams * 4
-    calories_from_fat = fat_grams * 9
-    calories_from_carbs = carbs_grams * 4
+    weight_loss_total = current_weight - target_weight
+    weekly_fat_loss = weight_loss_total / fight_camp_length
 
-    target_calories = calories_from_protein + calories_from_fat + calories_from_carbs
+    for week in range(1, fight_camp_length + 1):
+        projected_weight = current_weight - weekly_fat_loss * week
+        bmr = estimate_bmr(projected_weight, age, sex)
+        tdee = bmr * 1.3
 
-    # --- Nutrition Section ---
-    st.markdown("## Daily Nutrition Targets")
-    with st.container():
-        col1, col2 = st.columns(2)
-        with col1:
-            st.metric("Calories (kcal)", f"{target_calories:.0f}")
-            st.metric("Protein (g)", f"{protein_grams:.0f}")
-        with col2:
-            st.metric("Fat (g)", f"{fat_grams:.0f}")
-            st.metric("Carbs (g)", f"{carbs_grams:.0f}")
+        protein = 2.0 * projected_weight
+        fat = 1.0 * projected_weight
+        carbs = carbs_multiplier * projected_weight
 
-    st.markdown("## Weekly Progress")
+        calories = (protein * 4) + (fat * 9) + (carbs * 4)
+
+        weekly_data.append({
+            "Week": week,
+            "Target Weight (kg)": round(projected_weight, 1),
+            "Calories (kcal)": round(calories),
+            "Protein (g)": round(protein),
+            "Fat (g)": round(fat),
+            "Carbs (g)": round(carbs)
+        })
+
+    df = pd.DataFrame(weekly_data)
+    st.dataframe(df, use_container_width=True)
+
+    st.markdown("## Overall Progress")
     st.progress(1 - days_left / (fight_camp_length * 7))
 
-    if fight_week_mode:
-        st.markdown("## Fight Week Strategy")
-
-        st.subheader("Glycogen Depletion")
-        st.write("- Reduce carbs by 50-80g/day 5-7 days out.")
-        with st.expander("Why deplete glycogen?"):
-            st.write("Lower glycogen = lower stored water = lower weight.")
-
-        st.subheader("Fibre Reduction")
-        st.write("- Under 10g fibre/day 3 days before weigh-in.")
-        with st.expander("Why reduce fibre?"):
-            st.write("Less gut residue = lighter scale weight.")
-
-        st.subheader("Salt Reduction")
-        st.write("- 0.5-1g salt/day 3 days before weigh-in.")
-        with st.expander("Why reduce salt?"):
-            st.write("Lower salt = less water retention.")
-
-        st.subheader("Water Loading")
-        st.write("- 100ml/kg 4,3,2 days before weigh-in.")
-        st.write("- 15ml/kg 1 day before.")
-        with st.expander("Why water load?"):
-            st.write("Teaches body to flush water aggressively.")
-
-        st.subheader("Post Weigh-in Recovery")
-        st.write("- 1L electrolyte drink immediately.")
-        st.write("- Carb-rich meals every 1-2 hours.")
-        with st.expander("Why structured rehydration?"):
-            st.write("Rapid plasma volume restoration = better performance.")
-
-    else:
-        st.markdown("## Weight Cut Overview")
-        weight_to_lose = current_weight - target_weight
-        water_cut_kg = 0.03 * target_weight  # Assume 3% for now
-        fight_week_start_weight = target_weight + (2 * water_cut_kg)
-        fat_loss_goal = current_weight - fight_week_start_weight
-        fat_loss_per_week = fat_loss_goal / (fight_camp_length - 1)
-
-        for week in range(1, fight_camp_length):
-            target_weight_week = current_weight - (fat_loss_per_week * week)
-            st.write(f"Week {week}: Target ~ {target_weight_week:.1f} kg")
-
-        st.write(f"Fight Week Start Target: ~{fight_week_start_weight:.1f} kg")
-
-        st.markdown("## Supplement Guidance")
-        st.write("- Daily multivitamin.")
-        st.write("- Extra electrolytes during water loading.")
-        st.write("- Whey protein as needed.")
-
     # --- Download Plan Button ---
-    st.button("Download Your Plan")
-
+    st.button("Download Your Fight Camp Plan")
 else:
     st.error("Please select a valid future fight date.")
