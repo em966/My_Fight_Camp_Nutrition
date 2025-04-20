@@ -54,7 +54,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # --- Logo and Title ---
-with open("/mnt/data/49340553-e327-4012-8d65-10f0e88ed17c.png", "rb") as f:
+with open("/mnt/data/1e7f2ed8-4c87-49e7-8a02-b5d08a74b6f9.png", "rb") as f:
     logo_base64 = base64.b64encode(f.read()).decode()
 
 st.markdown(
@@ -66,8 +66,6 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
-
-
 
 # --- Sidebar Inputs ---
 st.sidebar.header("Your Fight Details")
