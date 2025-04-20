@@ -42,7 +42,13 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # --- Logo ---
-st.image("/mnt/data/6c0d37cf-eab0-4c49-8cc3-0328816f87ac.png", use_column_width=True)
+from PIL import Image
+
+# Load the image properly
+logo = Image.open("/mnt/data/e901e3dd-09e8-4de8-b81d-94aea894c6a0.png")
+
+# Display logo at top
+st.image(logo, use_container_width=True)
 
 st.title("My Fight Camp Nutrition")
 
