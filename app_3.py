@@ -3,8 +3,19 @@ from datetime import datetime, timedelta
 import io
 from fpdf import FPDF
 import unicodedata
-import base64
-from PIL import Image
+
+# --- Streamlit Page Config ---
+st.set_page_config(page_title="My Fight Camp Nutrition", layout="centered")
+
+# --- Sidebar Upload Logo ---
+uploaded_logo = st.file_uploader("Upload your logo", type=["png", "jpg", "jpeg"])
+
+if uploaded_logo:
+    st.image(uploaded_logo, width=200)
+
+# --- Title
+st.title("My Fight Camp Nutrition")
+st.caption("Personalised nutrition and weight cut strategy.")
 
 # --- Utility Functions ---
 def clean_text(text):
@@ -53,19 +64,6 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# --- Logo and Title ---
-with open("/mnt/data/1e7f2ed8-4c87-49e7-8a02-b5d08a74b6f9.png", "rb") as f:
-    logo_base64 = base64.b64encode(f.read()).decode()
-
-st.markdown(
-    f"""
-    <div class="header-bar">
-        <img src="data:image/png;base64,{logo_base64}" style="width:200px; margin-bottom:10px;"/>
-        <h1>My Fight Camp Nutrition</h1>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
 
 # --- Sidebar Inputs ---
 st.sidebar.header("Your Fight Details")
