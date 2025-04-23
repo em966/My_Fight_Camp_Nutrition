@@ -56,6 +56,20 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+st.markdown("""
+<style>
+    /* Sidebar toggle button */
+    [data-testid="collapsedControl"] {
+        background-color: #ff4b4b !important;
+        color: white !important;
+        width: 40px !important;
+        height: 40px !important;
+        border-radius: 8px !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
+        margin: 10px !important;
+    }
+</style>
+""", unsafe_allow_html=True)
 
 # --- Header Section ---
 st.markdown("<div class='header-bar'>", unsafe_allow_html=True)
