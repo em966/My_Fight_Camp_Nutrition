@@ -33,7 +33,7 @@ st.markdown("""
         margin: 10px 0 0 0;
         font-size: 2em;
     }
-    header {visibility: hidden;}
+    header {visibility: hidden; display: none;}
 </style>
 """, unsafe_allow_html=True)
 
@@ -137,6 +137,7 @@ if days_left > 0:
         else:
             with st.container():
                 st.header("Daily Nutrition Targets - Week 1")
+                st.subheader(f"Goal Weight Loss for Week 1: ~{fat_loss_per_week:.2f} kg")
                 for day in range(1, 8):
                     st.subheader(f"Day {day}")
                     st.write(f"**Calories:** ~{target_calories:.0f} kcal")
@@ -155,3 +156,4 @@ if days_left > 0:
                 st.write(f"Fight Week Start: ~{fight_week_start_weight:.1f} kg")
 
 st.caption("Make cutting weight simple.")
+
