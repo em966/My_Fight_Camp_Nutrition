@@ -192,5 +192,3 @@ else:
     st.error("Please select a valid future fight date.")
 
 st.caption("Make cutting weight simple.")
-
-
