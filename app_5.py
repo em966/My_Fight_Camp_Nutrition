@@ -170,8 +170,8 @@ if days_left > 28:
             st.write("- 1L electrolyte drink + carb meals every 1-2 hrs.")
         else:
             st.header("Weekly Nutrition & Weight Targets")
-            with st.expander("Show Weekly Targets Table"):
-                st.dataframe(df_weekly.set_index("Week"))
+            st.dataframe(df_weekly.set_index("Week"))
+            
 else:
     st.error("Fight date must be at least 4 weeks in the future.")
 
