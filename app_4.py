@@ -57,12 +57,15 @@ water_cut_percentage = st.sidebar.slider("Water Cut Percentage (Max 5%)", min_va
 st.sidebar.header("Training Intensity")
 training_level = st.sidebar.selectbox("Overall Training Intensity", options=["Low (<5 hrs/week)", "Medium (5-10 hrs/week)", "High (>10 hrs/week)"])
 
-# Assign training calories based on level
+# Macronutrient multipliers based on training level
 if training_level == "Low (<5 hrs/week)":
+    carb_multiplier = 2.0
     training_calories = 200
 elif training_level == "Medium (5-10 hrs/week)":
+    carb_multiplier = 2.75
     training_calories = 400
 else:
+    carb_multiplier = 3.0
     training_calories = 600
 
 fight_week_mode = st.sidebar.checkbox("Activate Fight Week Mode")
@@ -97,8 +100,7 @@ if days_left > 0:
 
         protein_grams = 2.0 * current_weight
         fat_grams = 1.0 * current_weight
-        remaining_calories = target_calories - (protein_grams * 4 + fat_grams * 9)
-        carbs_grams = remaining_calories / 4
+        carb_grams = carb_multiplier * current_weight
 
         if fight_week_mode:
             st.header("Fight Week Plan")
@@ -134,13 +136,16 @@ if days_left > 0:
 
         else:
             with st.container():
-                st.header("Daily Nutrition Targets")
-                st.write(f"**Calories per Day:** ~{target_calories:.0f} kcal")
-                st.write(f"**Protein:** {protein_grams:.0f} g/day")
-                st.write(f"**Fat:** {fat_grams:.0f} g/day")
-                st.write(f"**Carbs:** {carbs_grams:.0f} g/day")
-                st.write("**Fibre:** 30g/day")
-                st.write("**Salt:** 3-5g/day")
+                st.header("Daily Nutrition Targets - Week 1")
+                for day in range(1, 8):
+                    st.subheader(f"Day {day}")
+                    st.write(f"**Calories:** ~{target_calories:.0f} kcal")
+                    st.write(f"**Protein:** {protein_grams:.0f} g")
+                    st.write(f"**Fat:** {fat_grams:.0f} g")
+                    st.write(f"**Carbs:** {carb_grams:.0f} g")
+                    st.write("**Fibre:** 30g")
+                    st.write("**Salt:** 3-5g")
+                    st.markdown("---")
 
             with st.container():
                 st.header("Weekly Weight Goals")
