@@ -7,17 +7,35 @@ import pandas as pd
 st.set_page_config(page_title="My Fight Camp Nutrition", layout="centered")
 
 # --- Add Logo ---
-st.image("logo.png", width=150)  # Adjust width as needed
+st.image("logo.png", width=200)  # Adjust width as needed
+st.markdown("""
+    <div style='text-align: center;'>
+        <img src='logo.png' width='200'/>
+    </div>
+""", unsafe_allow_html=True)
 
 
 # --- Custom Styles ---
 st.markdown("""
 <style>
+    /* Hide Streamlit default top bar and footer */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden; display: none;}
+
+    /* Remove top padding */
+    .block-container {
+        padding-top: 0rem;
+    }
+
+    /* Main app background and styling */
     .stApp {
         background-color: #f0f2f6;
         color: #000000;
-        padding: 20px;
+        padding: 0px;
     }
+
+    /* Section card styling */
     .section {
         background-color: #ffffff;
         padding: 20px;
@@ -25,21 +43,17 @@ st.markdown("""
         border-radius: 10px;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
-    /* Improve visibility of the expander toggle button */
-    button[title="Expand"] {
+
+    /* Expander button styling */
+    button[title="Expand"], button[title="Collapse"] {
         background-color: #ff4b4b !important;
         color: white !important;
         border-radius: 8px !important;
         border: none !important;
         box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
     }
-    button[title="Collapse"] {
-        background-color: #ff4b4b !important;
-        color: white !important;
-        border-radius: 8px !important;
-        border: none !important;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
-    }
+
+    /* Header bar customization */
     .header-bar {
         background-color: #ffffff;
         padding: 20px;
@@ -48,23 +62,21 @@ st.markdown("""
         text-align: center;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
+
     .header-bar h1 {
         color: #ff4b4b;
         margin: 10px 0 0 0;
         font-size: 2em;
     }
-            }
-    header {visibility: hidden; display: none;}
-    .stAlert { background-color: #ffdede !important; color: black !important; }
-    button[title="Expand"], button[title="Collapse"] {
-        background-color: #ff4b4b !important;
-        color: white !important;
-        border-radius: 8px !important;
-        border: none !important;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
+
+    /* Error box styling (readable text) */
+    .stAlert {
+        background-color: #ffdede !important;
+        color: black !important;
     }
 </style>
 """, unsafe_allow_html=True)
+
 
 # --- Header Section ---
 st.markdown("<div class='header-bar'>", unsafe_allow_html=True)
@@ -170,11 +182,11 @@ if days_left > 28:
 
         if fight_week_mode:
             st.header("Fight Week Plan")
-            st.markdown(f"### Fight Week Start: {fight_date - timedelta(days=7):%d %b %Y}")
+            st.markdown(f"### Fight Week Start Date: {fight_date - timedelta(days=7):%d %b %Y}")
             st.markdown(f"### Fight Week Start Weight: ~{fight_week_start_weight:.1f} kg")
             st.markdown("---")
             st.subheader("Carbohydrate Management")
-            st.write("- 5-7 days out: Reduce carbs by 50-80g/day.")
+            st.write("- 5-7 days before weigh-in: Reduce carbs by 50-80g/day.")
             with st.expander("Why reduce carbs?"):
                 st.write("Depletes glycogen stores and associated water to drop weight.")
 
@@ -189,7 +201,7 @@ if days_left > 28:
                 st.write("Helps eliminate retained water.")
 
             st.subheader("Water Loading")
-            st.write("- Days 4–2: 100ml/kg | Day 1: 15ml/kg | Weigh-in: minimal sips.")
+            st.write("- 4–2 out: 100ml/kg | 1 day out: 15ml/kg | Weigh-in day: minimal sips only.")
             with st.expander("Why water load?"):
                 st.write("Flushes excess water rapidly.")
 
