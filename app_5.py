@@ -57,14 +57,10 @@ fight_date = st.sidebar.date_input("Fight Date", min_value=datetime.today())
 water_cut_percentage = st.sidebar.slider("Water Cut Percentage (Max 5%)", min_value=0.0, max_value=5.0, value=0.0, step=0.1)
 
 # Training intensity
-st.sidebar.header("Training Intensity")
 training_level = st.sidebar.selectbox(
-    "Training Intensity",
-    options=["Low (<5 hrs/week)", "Medium (5-10 hrs/week)", "High (>10 hrs/week)"]
+    "Training Intensity (per week)",
+    options=["Low (<5 hrs)", "Medium (5-10 hrs)", "High (>10 hrs)"]
 )
-
-
-
 
 
 if training_level == "Low (<5 hrs/week)":
@@ -101,7 +97,11 @@ if days_left > 28:
         fat_loss_goal = current_weight - fight_week_start_weight
 
         total_weeks = fight_camp_length - 1
-        weekly_losses = [((i + 1) / sum(range(1, total_weeks + 1))) * fat_loss_goal for i in range(total_weeks)]
+        # Spread weight loss nearly equally, with a slight increase toward the final weeks
+        base_loss = fat_loss_goal / total_weeks
+        weekly_losses = [base_loss + (0.05 * i) for i in range(total_weeks)]
+        adjustment = fat_loss_goal / sum(weekly_losses)
+        weekly_losses = [wl * adjustment for wl in weekly_losses]
 
         weekly_data = []
         last_weight = current_weight
