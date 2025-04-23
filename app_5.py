@@ -18,24 +18,11 @@ st.markdown("""
 # --- Custom Styles ---
 st.markdown("""
 <style>
-    /* Hide Streamlit default top bar and footer */
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    header {visibility: hidden; display: none;}
-
-    /* Remove top padding */
-    .block-container {
-        padding-top: 0rem;
-    }
-
-    /* Main app background and styling */
     .stApp {
         background-color: #f0f2f6;
         color: #000000;
-        padding: 0px;
+        padding: 20px;
     }
-
-    /* Section card styling */
     .section {
         background-color: #ffffff;
         padding: 20px;
@@ -43,17 +30,21 @@ st.markdown("""
         border-radius: 10px;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
-
-    /* Expander button styling */
-    button[title="Expand"], button[title="Collapse"] {
+    /* Improve visibility of the expander toggle button */
+    button[title="Expand"] {
         background-color: #ff4b4b !important;
         color: white !important;
         border-radius: 8px !important;
         border: none !important;
         box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
     }
-
-    /* Header bar customization */
+    button[title="Collapse"] {
+        background-color: #ff4b4b !important;
+        color: white !important;
+        border-radius: 8px !important;
+        border: none !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
+    }
     .header-bar {
         background-color: #ffffff;
         padding: 20px;
@@ -62,17 +53,20 @@ st.markdown("""
         text-align: center;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
-
     .header-bar h1 {
         color: #ff4b4b;
         margin: 10px 0 0 0;
         font-size: 2em;
     }
-
-    /* Error box styling (readable text) */
-    .stAlert {
-        background-color: #ffdede !important;
-        color: black !important;
+            }
+    header {visibility: hidden; display: none;}
+    .stAlert { background-color: #ffdede !important; color: black !important; }
+    button[title="Expand"], button[title="Collapse"] {
+        background-color: #ff4b4b !important;
+        color: white !important;
+        border-radius: 8px !important;
+        border: none !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
     }
 </style>
 """, unsafe_allow_html=True)
