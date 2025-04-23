@@ -116,19 +116,21 @@ if days_left > 28:
         weekly_data = []
         last_weight = current_weight
 
+        # Calculate the target weight for each week
+      
         for i, loss in enumerate(weekly_losses):
-            this_week_weight = last_weight - loss
-            bmr = 10 * this_week_weight + 6.25 * height - 5 * age + (5 if sex == "Male" else -161)
+            week_weight = last_weight - loss
+            bmr = 10 * week_weight + 6.25 * height - 5 * age + (5 if sex == "Male" else -161)
             maintenance = bmr * training_calories_factor
             deficit = (loss * 7700) / 7
             target_calories = maintenance - deficit
-            protein_g = round(2.0 * this_week_weight)
-            fat_g = round(1.0 * this_week_weight)
-            carbs_g = round(carb_multiplier * this_week_weight)
+            protein_g = round(2.0 * week_weight)
+            fat_g = round(1.0 * week_weight)
+            carbs_g = round(carb_multiplier * week_weight)
 
             weekly_data.append({
                 "Week": i + 1,
-                "Target Weight (kg)": round(this_week_weight, 1),
+                "Target Weight (kg)": round(week_weight, 1),
                 "Calories": round(target_calories),
                 "Protein (g)": protein_g,
                 "Fat (g)": fat_g,
@@ -137,7 +139,7 @@ if days_left > 28:
                 "Salt (g)": "3-5"
             })
 
-            last_weight = this_week_weight
+            last_weight = week_weight
 
         df_weekly = pd.DataFrame(weekly_data)
 
