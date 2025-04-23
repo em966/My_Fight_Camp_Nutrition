@@ -58,7 +58,12 @@ water_cut_percentage = st.sidebar.slider("Water Cut Percentage (Max 5%)", min_va
 
 # Training intensity
 st.sidebar.header("Training Intensity")
-training_level = st.sidebar.selectbox("Overall Training Intensity", options=["Low (<5 hrs/week)", "Medium (5-10 hrs/week)", "High (>10 hrs/week)"])
+training_level = st.sidebar.selectbox(
+    "\u00a0",  # visually blank label, but valid
+    options=["Low (<5 hrs/week)", "Medium (5-10 hrs/week)", "High (>10 hrs/week)"]
+)
+
+
 
 if training_level == "Low (<5 hrs/week)":
     carb_multiplier = 2.5
