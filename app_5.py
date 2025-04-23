@@ -56,35 +56,28 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+# --- Sidebar Toggle Button Styling ---
 st.markdown("""
 <style>
-    /* Sidebar toggle button */
-    [data-testid="collapsedControl"] {
-        background-color: #ff4b4b !important;
-        color: white !important;
-        width: 40px !important;
-        height: 40px !important;
-        border-radius: 8px !important;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
-        margin: 10px !important;
-    }
-    [data-testid="collapsedControl"] {
-        background-color: #ff4b4b !important;
-        color: white !important;
-        width: 40px !important;
-        height: 40px !important;
-        border-radius: 8px !important;
-        border: 2px solid white !important;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.4) !important;
-        z-index: 1000;
-        animation: pulse 1.5s infinite;
-    }
+[data-testid="collapsedControl"] {
+    background-color: #ff4b4b !important;
+    color: white !important;
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 8px !important;
+    border: 2px solid white !important;
+    box-shadow: 0 0 8px rgba(255, 75, 75, 0.8), 0 0 15px rgba(255, 75, 75, 0.5) !important;
+    margin: 10px !important;
+    z-index: 9999 !important;
+    animation: pulse 1.5s infinite;
+}
 
-    @keyframes pulse {
-        0% { box-shadow: 0 0 0 0 rgba(255, 75, 75, 0.7); }
-        70% { box-shadow: 0 0 0 10px rgba(255, 75, 75, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(255, 75, 75, 0); }
-    }
+/* Pulse animation for visibility */
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(255, 75, 75, 0.6); }
+    70% { box-shadow: 0 0 0 12px rgba(255, 75, 75, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 75, 75, 0); }
+}
 </style>
 """, unsafe_allow_html=True)
 
