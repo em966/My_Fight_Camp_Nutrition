@@ -35,13 +35,14 @@ st.markdown("""
         font-size: 2em;
     }
     header {visibility: hidden; display: none;}
+    .stAlert { background-color: #ffdede !important; color: black !important; }
 </style>
 """, unsafe_allow_html=True)
 
 # --- Header Section ---
 st.markdown("<div class='header-bar'>", unsafe_allow_html=True)
 st.title("My Fight Camp Nutrition")
-st.caption("A prototype nutrition plan built by fighters, for fighters!")
+st.caption("A prototype nutrition planner built for fighters!")
 st.markdown("</div>", unsafe_allow_html=True)
 
 # --- Sidebar Inputs ---
@@ -49,6 +50,7 @@ st.sidebar.header("Your Fight Details")
 
 age = st.sidebar.number_input("Age", min_value=10, max_value=80, value=25)
 sex = st.sidebar.selectbox("Sex", ["Male", "Female"])
+height = st.sidebar.number_input("Height (cm)", min_value=140, max_value=220, value=170)
 current_weight = st.sidebar.number_input("Current Weight (kg)", min_value=30.0, max_value=150.0, value=70.0, step=0.1)
 target_weight = st.sidebar.number_input("Target Fight Weight (kg)", min_value=30.0, max_value=150.0, value=65.0, step=0.1)
 fight_date = st.sidebar.date_input("Fight Date", min_value=datetime.today())
@@ -61,13 +63,13 @@ training_level = st.sidebar.selectbox("Overall Training Intensity", options=["Lo
 # Macronutrient multipliers based on training level
 if training_level == "Low (<5 hrs/week)":
     carb_multiplier = 2.0
-    training_calories = 200
+    training_calories_factor = 1.375
 elif training_level == "Medium (5-10 hrs/week)":
     carb_multiplier = 2.75
-    training_calories = 400
+    training_calories_factor = 1.55
 else:
     carb_multiplier = 3.0
-    training_calories = 600
+    training_calories_factor = 1.75
 
 fight_week_mode = st.sidebar.checkbox("Activate Fight Week Mode")
 
@@ -92,17 +94,17 @@ if days_left > 0:
         fight_week_start_weight = target_weight + (2 * water_cut_kg)
         fat_loss_goal = current_weight - fight_week_start_weight
 
-        # Gradually increasing weekly fat loss rate
         total_weeks = fight_camp_length - 1
         weekly_losses = [((i + 1) / sum(range(1, total_weeks + 1))) * fat_loss_goal for i in range(total_weeks)]
         calorie_deficits = [(loss * 7700) / 7 for loss in weekly_losses]
 
-        bmr = 10 * current_weight + 6.25 * 170 - 5 * age + (5 if sex == "Male" else -161)
+        bmr = 10 * current_weight + 6.25 * height - 5 * age + (5 if sex == "Male" else -161)
+        maintenance_calories = bmr * training_calories_factor
 
         weekly_data = []
         for week in range(total_weeks):
             week_weight = current_weight - sum(weekly_losses[:week+1])
-            week_calories = bmr + training_calories - calorie_deficits[week]
+            week_calories = maintenance_calories - calorie_deficits[week]
             protein_g = 2.0 * week_weight
             fat_g = 1.0 * week_weight
             carb_g = carb_multiplier * week_weight
@@ -157,12 +159,4 @@ if days_left > 0:
                 with st.expander("Show Weekly Targets Table"):
                     st.dataframe(df_weekly.set_index("Week"))
 
-else:
-    st.warning("The fight date must be in the future.")
-
 st.caption("Make cutting weight simple.")
-st.caption("This app is for educational purposes only. Consult a healthcare professional before making any dietary changes.")
-
-st.markdown("---")
-st.write("**Note:** The app is a prototype and may not cover all aspects of nutrition and weight management. Always consult a professional for personalized advice.")
-
