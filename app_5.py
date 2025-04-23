@@ -35,7 +35,11 @@ st.markdown("""
         font-size: 2em;
     }
     header {visibility: hidden; display: none;}
-    .stAlert { background-color: #ffdede !important; color: black !important; }
+            
+    /* Force all alert boxes (info, warning, error) to have black text */
+    div[data-testid="stAlert"] {
+        color: black !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -98,10 +102,16 @@ if days_left > 28:
 
         total_weeks = fight_camp_length - 1
         # Spread weight loss nearly equally, with a slight increase toward the final weeks
+        # Spread weight loss nearly equally, with a soft increase in later weeks
         base_loss = fat_loss_goal / total_weeks
-        weekly_losses = [base_loss + (0.05 * i) for i in range(total_weeks)]
-        adjustment = fat_loss_goal / sum(weekly_losses)
-        weekly_losses = [wl * adjustment for wl in weekly_losses]
+        gradient = 0.02  # small incremental increase (2% more per week)
+
+        # Generate a soft gradient (e.g., 1.0, 1.02, 1.04, ..., for each week)
+        weight_factors = [1 + gradient * i for i in range(total_weeks)]
+        normalization_factor = fat_loss_goal / sum(weight_factors)
+
+        # Apply normalized weekly losses
+        weekly_losses = [w * normalization_factor for w in weight_factors]
 
         weekly_data = []
         last_weight = current_weight
