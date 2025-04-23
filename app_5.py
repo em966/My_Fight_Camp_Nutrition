@@ -57,29 +57,42 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # --- Sidebar Toggle Button Styling ---
+
 st.markdown("""
 <style>
+/* Style the sidebar toggle control more visibly */
 [data-testid="collapsedControl"] {
     background-color: #ff4b4b !important;
-    color: white !important;
-    width: 40px !important;
-    height: 40px !important;
-    border-radius: 8px !important;
     border: 2px solid white !important;
-    box-shadow: 0 0 8px rgba(255, 75, 75, 0.8), 0 0 15px rgba(255, 75, 75, 0.5) !important;
-    margin: 10px !important;
-    z-index: 9999 !important;
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 12px !important;
+    box-shadow: 0 0 12px rgba(255, 75, 75, 0.9) !important;
+    margin: 12px !important;
+    z-index: 1000 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     animation: pulse 1.5s infinite;
 }
 
-/* Pulse animation for visibility */
+/* Make the icon inside it more visible */
+[data-testid="collapsedControl"] svg {
+    stroke: white !important;
+    stroke-width: 3 !important;
+    width: 22px !important;
+    height: 22px !important;
+}
+
+/* Pulse effect */
 @keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(255, 75, 75, 0.6); }
-    70% { box-shadow: 0 0 0 12px rgba(255, 75, 75, 0); }
+    0% { box-shadow: 0 0 0 0 rgba(255, 75, 75, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(255, 75, 75, 0); }
     100% { box-shadow: 0 0 0 0 rgba(255, 75, 75, 0); }
 }
 </style>
 """, unsafe_allow_html=True)
+
 
 # --- Header Section ---
 st.markdown("<div class='header-bar'>", unsafe_allow_html=True)
