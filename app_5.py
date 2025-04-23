@@ -67,10 +67,10 @@ training_level = st.sidebar.selectbox(
 )
 
 
-if training_level == "Low (<5 hrs/week)":
+if training_level == "Low (<5 hrs)":
     carb_multiplier = 2.5
     training_calories_factor = 1.375
-elif training_level == "Medium (5-10 hrs/week)":
+elif training_level == "Medium (5-10 hrs)":
     carb_multiplier = 2.75
     training_calories_factor = 1.55
 else:
@@ -152,7 +152,7 @@ if days_left > 28:
             st.subheader("Fibre Management")
             st.write("- 3 days before weigh-in: Fibre <10g/day.")
             with st.expander("Why reduce fibre?"):
-                st.write("Minimizes undigested bulk in the gut.")
+                st.write("Minimises undigested bulk in the gut.")
 
             st.subheader("Salt Management")
             st.write("- 3 days before weigh-in: Salt 0.5-1g/day.")
