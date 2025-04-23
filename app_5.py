@@ -6,6 +6,10 @@ import pandas as pd
 # --- Streamlit Page Config ---
 st.set_page_config(page_title="My Fight Camp Nutrition", layout="centered")
 
+# --- Add Logo ---
+st.image("logo.png", width=150)  # Adjust width as needed
+
+
 # --- Custom Styles ---
 st.markdown("""
 <style>
@@ -167,8 +171,7 @@ if days_left > 28:
         if fight_week_mode:
             st.header("Fight Week Plan")
             st.markdown(f"### Fight Week Start: {fight_date - timedelta(days=7):%d %b %Y}")
-            st.subheader("Target Weight at Start of Fight Week")
-            st.write(f"~{fight_week_start_weight:.1f} kg")
+            st.markdown(f"### Fight Week Start Weight: ~{fight_week_start_weight:.1f} kg")
             st.markdown("---")
             st.subheader("Carbohydrate Management")
             st.write("- 5-7 days out: Reduce carbs by 50-80g/day.")
