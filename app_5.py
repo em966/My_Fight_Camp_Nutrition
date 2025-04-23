@@ -1,5 +1,5 @@
 import streamlit as st
-from datetime import datetime
+from datetime import datetime, timedelta
 import unicodedata
 import pandas as pd
 
@@ -49,11 +49,15 @@ st.markdown("""
         margin: 10px 0 0 0;
         font-size: 2em;
     }
+            }
     header {visibility: hidden; display: none;}
-            
-    /* Force all alert boxes (info, warning, error) to have black text */
-    div[data-testid="stAlert"] {
-        color: black !important;
+    .stAlert { background-color: #ffdede !important; color: black !important; }
+    button[title="Expand"], button[title="Collapse"] {
+        background-color: #ff4b4b !important;
+        color: white !important;
+        border-radius: 8px !important;
+        border: none !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -135,6 +139,7 @@ if days_left > 28:
       
         for i, loss in enumerate(weekly_losses):
             week_weight = last_weight - loss
+            this_week_date = today + timedelta(weeks=i)
             bmr = 10 * week_weight + 6.25 * height - 5 * age + (5 if sex == "Male" else -161)
             maintenance = bmr * training_calories_factor
             deficit = (loss * 7700) / 7
@@ -145,6 +150,7 @@ if days_left > 28:
 
             weekly_data.append({
                 "Week": i + 1,
+                "Date": this_week_date.strftime("%d %b"),
                 "Target Weight (kg)": round(week_weight, 1),
                 "Calories": round(target_calories),
                 "Protein (g)": protein_g,
@@ -160,6 +166,9 @@ if days_left > 28:
 
         if fight_week_mode:
             st.header("Fight Week Plan")
+            st.markdown(f"### Fight Week Start: {fight_date - timedelta(days=7):%d %b %Y}")
+            st.subheader("Target Weight at Start of Fight Week")
+            st.write(f"~{fight_week_start_weight:.1f} kg")
             st.markdown("---")
             st.subheader("Carbohydrate Management")
             st.write("- 5-7 days out: Reduce carbs by 50-80g/day.")
