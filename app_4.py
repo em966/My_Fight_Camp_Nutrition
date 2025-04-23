@@ -51,11 +51,17 @@ current_weight = st.sidebar.number_input("Current Weight (kg)", min_value=30.0, 
 target_weight = st.sidebar.number_input("Target Fight Weight (kg)", min_value=30.0, max_value=150.0, value=65.0, step=0.1)
 fight_date = st.sidebar.date_input("Fight Date", min_value=datetime.today())
 
-# --- New Training Dropdowns ---
-st.sidebar.header("Weekly Training Breakdown")
-high_intensity = st.sidebar.selectbox("High Intensity (hrs/week)", options=[i * 0.5 for i in range(41)], index=10)
-medium_intensity = st.sidebar.selectbox("Medium Intensity (hrs/week)", options=[i * 0.5 for i in range(41)], index=10)
-low_intensity = st.sidebar.selectbox("Low Intensity (hrs/week)", options=[i * 0.5 for i in range(41)], index=10)
+# --- Simplified Training Intensity Dropdown ---
+st.sidebar.header("Training Intensity")
+training_level = st.sidebar.selectbox("Overall Training Intensity", options=["Low (<5 hrs/week)", "Medium (5-10 hrs/week)", "High (>10 hrs/week)"])
+
+# Assign training calories based on level
+if training_level == "Low (<5 hrs/week)":
+    training_calories = 200
+elif training_level == "Medium (5-10 hrs/week)":
+    training_calories = 400
+else:
+    training_calories = 600
 
 # --- Calculations ---
 today = datetime.today().date()
@@ -80,7 +86,6 @@ if days_left > 0:
 
         bmr = 10 * current_weight + 6.25 * 170 - 5 * age + (5 if sex == "Male" else -161)
 
-        training_calories = (high_intensity * 60 * 11 + medium_intensity * 60 * 7.5 + low_intensity * 60 * 4.5) / 7
         total_daily_energy = bmr + training_calories
         target_calories = total_daily_energy - calorie_deficit_per_day
 
