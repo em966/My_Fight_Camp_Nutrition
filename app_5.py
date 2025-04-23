@@ -42,7 +42,7 @@ st.markdown("""
 # --- Header Section ---
 st.markdown("<div class='header-bar'>", unsafe_allow_html=True)
 st.title("My Fight Camp Nutrition")
-st.caption("A prototype nutrition planner built for fighters!")
+st.caption("A prototype nutrition plan created by fighters, for fighters!")
 st.markdown("</div>", unsafe_allow_html=True)
 
 # --- Sidebar Inputs ---
@@ -58,7 +58,7 @@ water_cut_percentage = st.sidebar.slider("Water Cut Percentage (Max 5%)", min_va
 
 # Training intensity
 st.sidebar.header("Training Intensity")
-training_level = st.sidebar.selectbox("Overall Training Intensity", options=["Low (<5 hrs/week)", "Medium (5-10 hrs/week)", "High (>10 hrs/week)"])
+training_level = st.sidebar.selectbox(options=["Low (<5 hrs/week)", "Medium (5-10 hrs/week)", "High (>10 hrs/week)"])
 
 if training_level == "Low (<5 hrs/week)":
     carb_multiplier = 2.5
@@ -84,9 +84,9 @@ st.sidebar.subheader("Your Subscription Plan")
 st.sidebar.write(f"Fight Camp Length: **{fight_camp_length} weeks**")
 st.sidebar.write(f"Total Subscription Cost: **£{subscription_price}**")
 
-if days_left > 0:
+if days_left > 28:
     if current_weight <= target_weight:
-        st.error("⚠️ Current weight must be higher than fight weight.")
+        st.error("Current weight must be higher than fight weight.")
     else:
         weight_to_lose = current_weight - target_weight
         water_cut_kg = (water_cut_percentage / 100) * target_weight
@@ -153,6 +153,8 @@ if days_left > 0:
             st.header("Weekly Nutrition & Weight Targets")
             with st.expander("Show Weekly Targets Table"):
                 st.dataframe(df_weekly.set_index("Week"))
+else:
+    st.error("Fight date must be at least 4 weeks in the future.")
 
 st.caption("Make cutting weight simple.")
 
