@@ -77,11 +77,18 @@ if days_left > 0:
         bmr = 10 * current_weight + 6.25 * 170 - 5 * age + (5 if sex == "Male" else -161)
         daily_exercise_factor = {"High": 3, "Medium": 2.75, "Moderate": 2.5}[intensity]
 
+        # Macro calculation
         protein_grams = 2.0 * current_weight
         fat_grams = 1.0 * current_weight
         carbs_grams = daily_exercise_factor * current_weight
 
-        total_calories = protein_grams * 4 + fat_grams * 9 + carbs_grams * 4
+        # Calories from macros
+        calories_from_protein = protein_grams * 4
+        calories_from_fat = fat_grams * 9
+        calories_from_carbs = carbs_grams * 4
+        total_calories = calories_from_protein + calories_from_fat + calories_from_carbs
+
+        # Adjust for calorie deficit
         adjusted_calories = total_calories - calorie_deficit_per_day
 
         with st.container():
@@ -96,3 +103,4 @@ else:
     st.error("Please select a valid future fight date.")
 
 st.caption("Make cutting weight simple.")
+
