@@ -46,7 +46,7 @@ st.markdown("""
 # --- Header Section ---
 st.markdown("<div class='header-bar'>", unsafe_allow_html=True)
 st.title("My Fight Camp Nutrition")
-st.caption("A prototype nutrition plan created by fighters, for fighters!")
+st.caption("Make cutting weight simple: a prototype nutrition plan created by fighters, for fighters!")
 st.markdown("</div>", unsafe_allow_html=True)
 
 # --- Sidebar Inputs ---
@@ -173,7 +173,6 @@ if days_left > 28:
 else:
     st.error("Fight date must be at least 4 weeks in the future.")
 
-st.caption("Make cutting weight simple.")
 
 # --- Disclaimer ---
 st.markdown("---")
