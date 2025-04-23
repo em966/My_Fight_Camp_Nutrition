@@ -54,15 +54,14 @@ height = st.sidebar.number_input("Height (cm)", min_value=140, max_value=220, va
 current_weight = st.sidebar.number_input("Current Weight (kg)", min_value=30.0, max_value=150.0, value=70.0, step=0.1)
 target_weight = st.sidebar.number_input("Target Fight Weight (kg)", min_value=30.0, max_value=150.0, value=65.0, step=0.1)
 fight_date = st.sidebar.date_input("Fight Date", min_value=datetime.today())
-water_cut_percentage = st.sidebar.slider("Water Cut Percentage (Max 5%)", min_value=0.0, max_value=5.0, value=3.0, step=0.1)
+water_cut_percentage = st.sidebar.slider("Water Cut Percentage (Max 5%)", min_value=0.0, max_value=5.0, value=0.0, step=0.1)
 
-# --- Simplified Training Intensity Dropdown ---
+# Training intensity
 st.sidebar.header("Training Intensity")
 training_level = st.sidebar.selectbox("Overall Training Intensity", options=["Low (<5 hrs/week)", "Medium (5-10 hrs/week)", "High (>10 hrs/week)"])
 
-# Macronutrient multipliers based on training level
 if training_level == "Low (<5 hrs/week)":
-    carb_multiplier = 2.0
+    carb_multiplier = 2.5
     training_calories_factor = 1.375
 elif training_level == "Medium (5-10 hrs/week)":
     carb_multiplier = 2.75
@@ -87,7 +86,7 @@ st.sidebar.write(f"Total Subscription Cost: **£{subscription_price}**")
 
 if days_left > 0:
     if current_weight <= target_weight:
-        st.error("Current weight must be higher than target fight weight.")
+        st.error("⚠️ Current weight must be higher than fight weight.")
     else:
         weight_to_lose = current_weight - target_weight
         water_cut_kg = (water_cut_percentage / 100) * target_weight
@@ -96,28 +95,32 @@ if days_left > 0:
 
         total_weeks = fight_camp_length - 1
         weekly_losses = [((i + 1) / sum(range(1, total_weeks + 1))) * fat_loss_goal for i in range(total_weeks)]
-        calorie_deficits = [(loss * 7700) / 7 for loss in weekly_losses]
-
-        bmr = 10 * current_weight + 6.25 * height - 5 * age + (5 if sex == "Male" else -161)
-        maintenance_calories = bmr * training_calories_factor
 
         weekly_data = []
-        for week in range(total_weeks):
-            week_weight = current_weight - sum(weekly_losses[:week+1])
-            week_calories = maintenance_calories - calorie_deficits[week]
-            protein_g = 2.0 * week_weight
-            fat_g = 1.0 * week_weight
-            carb_g = carb_multiplier * week_weight
+        last_weight = current_weight
+
+        for i, loss in enumerate(weekly_losses):
+            this_week_weight = last_weight - loss
+            bmr = 10 * this_week_weight + 6.25 * height - 5 * age + (5 if sex == "Male" else -161)
+            maintenance = bmr * training_calories_factor
+            deficit = (loss * 7700) / 7
+            target_calories = maintenance - deficit
+            protein_g = round(2.0 * this_week_weight)
+            fat_g = round(1.0 * this_week_weight)
+            carbs_g = round(carb_multiplier * this_week_weight)
+
             weekly_data.append({
-                "Week": week + 1,
-                "Target Weight (kg)": round(week_weight, 1),
-                "Calories": round(week_calories),
-                "Protein (g)": round(protein_g),
-                "Fat (g)": round(fat_g),
-                "Carbs (g)": round(carb_g),
+                "Week": i + 1,
+                "Target Weight (kg)": round(this_week_weight, 1),
+                "Calories": round(target_calories),
+                "Protein (g)": protein_g,
+                "Fat (g)": fat_g,
+                "Carbs (g)": carbs_g,
                 "Fibre (g)": 30,
                 "Salt (g)": "3-5"
             })
+
+            last_weight = this_week_weight
 
         df_weekly = pd.DataFrame(weekly_data)
 
@@ -127,36 +130,33 @@ if days_left > 0:
             st.subheader("Carbohydrate Management")
             st.write("- 5-7 days out: Reduce carbs by 50-80g/day.")
             with st.expander("Why reduce carbs?"):
-                st.write("Reducing carbs helps deplete muscle glycogen stores and associated water, lowering body weight quickly before the weigh-in.")
+                st.write("Depletes glycogen stores and associated water to drop weight.")
 
             st.subheader("Fibre Management")
             st.write("- 3 days before weigh-in: Fibre <10g/day.")
             with st.expander("Why reduce fibre?"):
-                st.write("Reducing fibre minimizes undigested material and bulk in the gut, leading to lower body mass on the scale.")
+                st.write("Minimizes undigested bulk in the gut.")
 
             st.subheader("Salt Management")
             st.write("- 3 days before weigh-in: Salt 0.5-1g/day.")
             with st.expander("Why reduce salt?"):
-                st.write("Lowering salt intake reduces water retention, helping flush out excess body water before the weigh-in.")
+                st.write("Helps eliminate retained water.")
 
-            st.subheader("Water Loading Strategy")
-            st.write("- 4, 3, 2 days out: 100ml/kg body weight.")
-            st.write("- 1 day out: 15ml/kg body weight.")
-            st.write("- Weigh-in day: minimal sips only.")
+            st.subheader("Water Loading")
+            st.write("- Days 4–2: 100ml/kg | Day 1: 15ml/kg | Weigh-in: minimal sips.")
             with st.expander("Why water load?"):
-                st.write("Strategically overhydrating then cutting fluids trains the body to flush water rapidly, enhancing acute weight loss before weigh-in.")
+                st.write("Flushes excess water rapidly.")
 
-            st.subheader("Post Weigh-In Rehydration")
-            st.write("- 1L electrolyte solution immediately after weigh-in.")
-            st.write("- Small carb-rich meals every 1-2 hours.")
-            st.write("- Avoid high-fat and high-fibre foods initially.")
-            with st.expander("Why structured rehydration?"):
-                st.write("Rehydration restores plasma volume, electrolyte balance, and muscle glycogen efficiently, setting up optimal fight performance.")
-
+            st.subheader("Post Weigh-In")
+            st.write("- 1L electrolyte drink + carb meals every 1-2 hrs.")
         else:
-            with st.container():
-                st.header("Weekly Nutrition & Weight Targets")
-                with st.expander("Show Weekly Targets Table"):
-                    st.dataframe(df_weekly.set_index("Week"))
+            st.header("Weekly Nutrition & Weight Targets")
+            with st.expander("Show Weekly Targets Table"):
+                st.dataframe(df_weekly.set_index("Week"))
 
 st.caption("Make cutting weight simple.")
+
+# --- Disclaimer ---
+st.markdown("---")
+with st.expander("Disclaimer"):
+    st.write("This app is for informational purposes only and should not be considered medical advice. Always consult a healthcare professional before making significant changes to your diet or exercise routine.")
