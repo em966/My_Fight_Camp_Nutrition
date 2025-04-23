@@ -1,6 +1,7 @@
 import streamlit as st
 from datetime import datetime
 import unicodedata
+import pandas as pd
 
 # --- Streamlit Page Config ---
 st.set_page_config(page_title="My Fight Camp Nutrition", layout="centered")
@@ -138,15 +139,18 @@ if days_left > 0:
             with st.container():
                 st.header("Daily Nutrition Targets - Week 1")
                 st.subheader(f"Goal Weight Loss for Week 1: ~{fat_loss_per_week:.2f} kg")
-                for day in range(1, 8):
-                    st.subheader(f"Day {day}")
-                    st.write(f"**Calories:** ~{target_calories:.0f} kcal")
-                    st.write(f"**Protein:** {protein_grams:.0f} g")
-                    st.write(f"**Fat:** {fat_grams:.0f} g")
-                    st.write(f"**Carbs:** {carb_grams:.0f} g")
-                    st.write("**Fibre:** 30g")
-                    st.write("**Salt:** 3-5g")
-                    st.markdown("---")
+
+                week1_data = {
+                    "Day": [f"Day {i}" for i in range(1, 8)],
+                    "Calories (kcal)": [round(target_calories)] * 7,
+                    "Protein (g)": [round(protein_grams)] * 7,
+                    "Fat (g)": [round(fat_grams)] * 7,
+                    "Carbs (g)": [round(carb_grams)] * 7,
+                    "Fibre (g)": [30] * 7,
+                    "Salt (g)": ["3-5"] * 7
+                }
+                df_week1 = pd.DataFrame(week1_data)
+                st.dataframe(df_week1.set_index("Day"))
 
             with st.container():
                 st.header("Weekly Weight Goals")
@@ -156,4 +160,5 @@ if days_left > 0:
                 st.write(f"Fight Week Start: ~{fight_week_start_weight:.1f} kg")
 
 st.caption("Make cutting weight simple.")
+
 
