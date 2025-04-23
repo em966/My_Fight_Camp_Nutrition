@@ -39,7 +39,7 @@ st.markdown("""
 # --- Header Section ---
 st.markdown("<div class='header-bar'>", unsafe_allow_html=True)
 st.title("My Fight Camp Nutrition")
-st.caption("A prototype nutrition planner built for fighters!")
+st.caption("A prototype nutrition planner built by fighter, for fighters!")
 st.markdown("</div>", unsafe_allow_html=True)
 
 # --- Sidebar Inputs ---
