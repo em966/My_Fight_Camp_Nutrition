@@ -21,6 +21,21 @@ st.markdown("""
         border-radius: 10px;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
+    /* Improve visibility of the expander toggle button */
+    button[title="Expand"] {
+        background-color: #ff4b4b !important;
+        color: white !important;
+        border-radius: 8px !important;
+        border: none !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
+    }
+    button[title="Collapse"] {
+        background-color: #ff4b4b !important;
+        color: white !important;
+        border-radius: 8px !important;
+        border: none !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
+    }
     .header-bar {
         background-color: #ffffff;
         padding: 20px;
@@ -171,7 +186,7 @@ if days_left > 28:
         else:
             st.header("Weekly Nutrition & Weight Targets")
             st.dataframe(df_weekly.set_index("Week"))
-            
+
 else:
     st.error("Fight date must be at least 4 weeks in the future.")
 
