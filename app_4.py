@@ -53,7 +53,7 @@ fight_date = st.sidebar.date_input("Fight Date", min_value=datetime.today())
 
 # --- Simplified Training Intensity Dropdown ---
 st.sidebar.header("Training Intensity")
-training_level = st.sidebar.selectbox("Overall Training Intensity", options=["Low (<5 hrs/week)", "Medium (5-10 hrs/week)", "High (>10 hrs/week)"])
+training_level = st.sidebar.selectbox("Training Intensity", options=["Low (<5 hrs/week)", "Medium (5-10 hrs/week)", "High (>10 hrs/week)"])
 
 # Assign training calories based on level
 if training_level == "Low (<5 hrs/week)":
